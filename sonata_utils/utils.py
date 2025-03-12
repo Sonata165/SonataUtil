@@ -35,6 +35,19 @@ def read_json(path):
         data = json.loads(data)
     return data
 
+def my_log(log_fn, log_str):
+    with open(log_fn, 'a') as f:
+        f.write(log_str)
+
+
+def get_hostname():
+    '''
+    Get the name of a computer
+    '''
+    import socket
+    server_name = socket.gethostname().strip()
+    return server_name
+
 
 def save_json(data, path, sort=False):
     with open(path, 'w', encoding='utf8') as f:
@@ -45,7 +58,7 @@ def print_json(data):
     print(json.dumps(data,indent=4,ensure_ascii=False))
 
 
-def create_if_not_exist(fp):
+def create_dir_if_not_exist(fp):
     if os.path.exists(fp) is not True:
         os.makedirs(fp)
 
@@ -94,17 +107,18 @@ def timecode_to_millisecond(timecode):
     return ms
 
 
-# def convert_waveform_to_mono(waveform):
-#     '''
-#     Convert stereo waveform to mono waveform
-#     '''
-#     if waveform.shape[0] == 2:
-#         ret = torch.mean(waveform, dim=0)
-#     else:
-#         ret = waveform
-#     if ret.dim() != 2:
-#         ret = ret.unsqueeze(0)
-#     return ret
+def convert_waveform_to_mono(waveform):
+    '''
+    Convert stereo waveform to mono waveform
+    '''
+    import torch
+    if waveform.shape[0] == 2:
+        ret = torch.mean(waveform, dim=0)
+    else:
+        ret = waveform
+    if ret.dim() != 2:
+        ret = ret.unsqueeze(0)
+    return ret
 
 
 def get_latest_checkpoint(base_dir):
@@ -191,6 +205,23 @@ def save_yaml(data, fp):
     with open(fp, 'w') as f:
         yaml.safe_dump(data, f, sort_keys=False)
 
+def sort_dict_by_key(dic, reverse=False):
+    t = list(dic.items())
+    t.sort(reverse=reverse)
+    ret = dict(t)
+    return ret
+
+def update_dic(dic, k, v):
+    if k in dic:
+        dic[k].append(v)
+    else:
+        dic[k] = [v]
+
+def update_dic_cnt(dic, k):
+    if k in dic:
+        dic[k] += 1
+    else:
+        dic[k] = 1
 
 def print_yaml(data):
     print(yaml.safe_dump(data))
