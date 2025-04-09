@@ -16,12 +16,18 @@ from datetime import timedelta
 jpath = os.path.join
 
 
-def ls(dir_path, sort=True):
+def ls(dir_path, sort=True, ext=None):
     '''
     A better version of os.path.join
     '''
     fns = os.listdir(dir_path)
-    fns = [fn for fn in fns if not fn.startswith('.')]
+    if '.DS_Store' in fns:
+        fns.remove('.DS_Store')
+
+    if ext is not None:
+        fns = [fn for fn in fns if fn.endswith(ext)]
+    else:
+        fns = [fn for fn in fns if not fn.startswith('.')]
     
     if sort:
         fns.sort()
