@@ -60,6 +60,37 @@ def save_json(data, path, sort=False):
         f.write(json.dumps(data, indent=4, sort_keys=sort, ensure_ascii=False))
 
 
+def read_jsonl(path):
+    """
+    Read a .jsonl file and return it as a list of dicts.
+    
+    Args:
+        path (str): Path to the JSONL file.
+        
+    Returns:
+        list: A list of dictionaries, one per line.
+    """
+    data = []
+    with open(path, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line:  # skip blank lines
+                data.append(json.loads(line))
+    return data
+
+def save_jsonl(data, path):
+    """
+    Save a list of dicts to a .jsonl file (one JSON object per line).
+    
+    Args:
+        data (list): A list of dictionaries.
+        path (str): Output file path.
+    """
+    with open(path, 'w', encoding='utf-8') as f:
+        for item in data:
+            f.write(json.dumps(item, ensure_ascii=False) + '\n')
+
+
 def print_json(data):
     print(json.dumps(data,indent=4,ensure_ascii=False))
 
