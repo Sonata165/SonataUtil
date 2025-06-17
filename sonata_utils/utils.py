@@ -264,7 +264,7 @@ def print_yaml(data):
     print(yaml.safe_dump(data))
 
 
-def normalize_waveform(waveform, target_db=-0.1):
+def normalize_waveform(waveform, target_db=-1):
     """
     Normalize the waveform to a specific dB level.
 
@@ -285,6 +285,38 @@ def normalize_waveform(waveform, target_db=-0.1):
     scaling_factor = target_amplitude / peak_amplitude
 
     # Normalize the waveform
+    normalized_waveform = waveform * scaling_factor
+
+    return normalized_waveform
+
+
+def normalize_waveform_np(waveform, target_db=-1):
+    """
+    Normalize the waveform to a specific dB level (NumPy version).
+
+    Parameters:
+    waveform (np.ndarray): The input waveform array.
+    target_db (float): The target dB level for normalization.
+
+    Returns:
+    np.ndarray: The normalized waveform.
+    """
+    import numpy as np
+    
+    # Compute the target amplitude
+    target_amplitude = 10 ** (target_db / 20)
+
+    # Compute the peak amplitude
+    peak_amplitude = np.max(np.abs(waveform))
+
+    # Avoid division by zero
+    if peak_amplitude == 0:
+        return waveform
+
+    # Compute the scaling factor
+    scaling_factor = target_amplitude / peak_amplitude
+
+    # Apply normalization
     normalized_waveform = waveform * scaling_factor
 
     return normalized_waveform
