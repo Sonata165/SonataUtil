@@ -16,7 +16,7 @@ from datetime import timedelta
 jpath = os.path.join
 
 
-def ls(dir_path, sort=True, ext=None):
+def ls(dir_path, sort=True, ext=None, full_path=False):
     '''
     A better version of os.path.join
     '''
@@ -31,6 +31,9 @@ def ls(dir_path, sort=True, ext=None):
     
     if sort:
         fns.sort()
+
+    if full_path:
+        fns = [jpath(dir_path, fn) for fn in fns]
 
     return fns
 
